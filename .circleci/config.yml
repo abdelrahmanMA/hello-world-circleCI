@@ -27,7 +27,8 @@ jobs:
     steps:
       - run:
           name: print_name
-          command: echo $MY_NAME
+          command: |
+            echo $MY_NAME
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
