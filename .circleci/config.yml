@@ -21,4 +21,4 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - use_command
+      - test_job_fail
