@@ -22,8 +22,8 @@ jobs:
           command: |
             apk add --update ansible # install the dependencies needed for your playbook
       - run:
-          name: Add hostname to known hosts
-          command: ssh-keyscan -H 35.170.53.255 >> ~/.ssh/known_hosts
+          name: ignore auth
+          command: export ANSIBLE_HOST_KEY_CHECKING=False
       - run:
           name: Configure server
           command: |
