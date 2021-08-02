@@ -3,10 +3,10 @@ version: 2.1
 
 commands:
   destroy_infra:
-      steps:
-        - run:
-            name: Destroy environment
-            command: "aws cloudformation delete-stack --stack-name circle-deploy"
+    steps:
+      - run:
+          name: Destroy environment
+          command: "aws cloudformation delete-stack --stack-name circle-deploy"
 
 jobs:
   deploy_infra:
@@ -37,19 +37,20 @@ jobs:
             ansible-playbook -i ansible/inventory ansible/main.yml
   smoke_test:
     docker:
-      - image: circleci/node:13.8.0
+      - image: amazon/aws-cli
     steps:
+      - checkout
       - run:
           name: failed smoke test
           command: |
             if curl -s --head https://google333.com
             then
-              exit 0
+              return 0
             else
-              exit 1
+              return 1
             fi
-      - destroy_infra:
-          when: on_fail
+      - destroy_infra
+        when: on_fail
 
 # Orchestrate or schedule a set of jobs
 workflows:
