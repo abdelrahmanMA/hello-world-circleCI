@@ -50,7 +50,7 @@ jobs:
             else
               return 1
             fi
-      - destroy_infra
+      - destroy_infra:
           when: on_fail
 
 # Orchestrate or schedule a set of jobs
