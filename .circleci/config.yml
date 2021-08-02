@@ -28,6 +28,19 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i ansible/inventory ansible/main.yml
+  smoke_test:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run:
+          name: failed smoke test
+          command: |
+            if curl -s --head https://google333.com
+            then
+              exit 0
+            else
+              exit 1
+            fi
 
 # Orchestrate or schedule a set of jobs
 workflows:
@@ -35,4 +48,4 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - configure_infrastructure
+      - smoke_test
