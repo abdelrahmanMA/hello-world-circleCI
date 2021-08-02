@@ -1,6 +1,13 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+commands:
+  destroy_infra:
+      steps:
+        - run:
+            name: Destroy environment
+            command: "aws cloudformation delete-stack --stack-name circle-deploy"
+
 jobs:
   deploy_infra:
     docker:
@@ -41,6 +48,8 @@ jobs:
             else
               exit 1
             fi
+      - destroy_infra:
+          when: on_fail
 
 # Orchestrate or schedule a set of jobs
 workflows:
@@ -48,4 +57,5 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
+      - deploy_infra
       - smoke_test
