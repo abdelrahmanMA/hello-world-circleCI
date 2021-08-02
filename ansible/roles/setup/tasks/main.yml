@@ -1,0 +1,33 @@
+---
+- name: "change dir"
+  shell: |
+    pwd
+  args:
+    chdir: "~/"
+  changed_when: false
+
+- name: "download nvm"
+  become: true
+  get_url:
+    url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh
+    dest: ./installnvm.sh
+
+- name: "install and activate nvm"
+  shell: |
+    mkdir -p .nvm
+    bash ./installnvm.sh
+  changed_when: false
+
+- name: "install node"
+  raw: nvm install node
+  changed_when: false
+
+- name: "copy index"
+  copy:
+    src: index.js
+    dest: ./index.js
+    mode: 0644
+
+- name: "run node"
+  command: nohup node index.js > output.log &
+  changed_when: false
