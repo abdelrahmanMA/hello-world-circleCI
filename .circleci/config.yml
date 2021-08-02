@@ -35,6 +35,7 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i ansible/inventory ansible/main.yml
+
   smoke_test:
     docker:
       - image: amazon/aws-cli
@@ -50,7 +51,7 @@ jobs:
               return 1
             fi
       - destroy_infra
-        when: on_fail
+          when: on_fail
 
 # Orchestrate or schedule a set of jobs
 workflows:
