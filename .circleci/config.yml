@@ -6,7 +6,9 @@ commands:
     steps:
       - run:
           name: Destroy environment
-          command: "aws cloudformation delete-stack --stack-name circle-deploy"
+          command: |
+            aws cloudformation delete-stack --stack-name circle-deploy
+          when: on_fail
 
 jobs:
   deploy_infra:
@@ -15,7 +17,9 @@ jobs:
     steps:
       - checkout
       - run:
-          command: "aws cloudformation create-stack --stack-name circle-deploy --template-body file://template.yml"
+          command: |
+            aws cloudformation create-stack --stack-name circle-deploy --template-body file://template.yml
+
   configure_infrastructure:
     docker:
       - image: python:3.7-alpine3.11
@@ -51,7 +55,6 @@ jobs:
               return 1
             fi
       - destroy_infra
-        when: on_fail
 
 # Orchestrate or schedule a set of jobs
 workflows:
